@@ -112,7 +112,7 @@ void XYEglThread::callBackOnChange(XYEglThread::OnChange onChange1, void *ctx) {
     this->onCreateCtx = ctx;
 }
 
-void XYEglThread::callBackONDraw(XYEglThread::OnDraw onDraw1, void *ctx) {
+void XYEglThread::callBackOnDraw(XYEglThread::OnDraw onDraw1, void *ctx) {
     this->onDraw = onDraw1;
     this->onDrawCtx = ctx;
 }

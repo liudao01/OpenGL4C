@@ -19,7 +19,7 @@ static int loadShaders(int shaderType, const char *code) {
 }
 
 static int createProgram(const char *vertex, const char *fragment) {
-    //2. 根据shader源码并比那一shader
+    //2. 根据shader源码编译shader
     int vertexShader = loadShaders(GL_VERTEX_SHADER, vertex);
     int fragmentShader = loadShaders(GL_FRAGMENT_SHADER, fragment);
     //3. 创建一个渲染程序

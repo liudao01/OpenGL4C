@@ -74,7 +74,7 @@ public:
 
     void callBackOnChange(OnChange onChange1, void *ctx);
 
-    void callBackONDraw(OnDraw onDraw1, void *ctx);
+    void callBackOnDraw(OnDraw onDraw1, void *ctx);
 
     void setRenderType(int renderType);
 

@@ -18,7 +18,8 @@ XYEglThread *eglThread = NULL;
 ANativeWindow *nativeWindow = NULL;
 
 
-const char *vertex = "attribute vec2 a_position;\n"
+
+const char *vertex = "attribute vec4 a_position;\n"
                      "\n"
                      "void main(){\n"
                      "    gl_Position = a_position;\n"
@@ -28,6 +29,7 @@ const char *fragment = "precision mediump float;\n"
                        "void main(){\n"
                        "    gl_FragColor = vec4(1f,0f,0f,1f);\n"
                        "}";
+
 int program;
 GLint vPosition;
 
@@ -61,10 +63,10 @@ void callback_SurfaceChange(int w, int h, void *ctx) {
 }
 
 void callback_SurfaceOndraw(void *ctx) {
-    LOGD("callback_SurfaceOndraw")
-    XYEglThread *wlEglThread = static_cast<XYEglThread *>(ctx);
+    LOGD("callback_SurfaceDraw");
+    XYEglThread *xyEglThread = static_cast<XYEglThread *>(ctx);
 
-    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     //使用program  赋值的操作 数据传递的操作都在这个useProgram之后
@@ -73,7 +75,7 @@ void callback_SurfaceOndraw(void *ctx) {
     glEnableVertexAttribArray(vPosition);
     glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8,vertexs);
 
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
 }
 
@@ -88,7 +90,7 @@ Java_com_xy_www_opengl4c_opengl_NativeOpengl_surfaceCreate(JNIEnv *env, jobject 
     eglThread->setRenderType(OPENGL_RENDER_HANDLE);
     eglThread->callBackOnCreate(callback_SurfaceCreate, eglThread);
     eglThread->callBackOnChange(callback_SurfaceChange, eglThread);
-    eglThread->callBackONDraw(callback_SurfaceOndraw, eglThread);
+    eglThread->callBackOnDraw(callback_SurfaceOndraw, eglThread);
 
 
     eglThread->onSurfaceCreate(nativeWindow);
@@ -102,7 +104,8 @@ Java_com_xy_www_opengl4c_opengl_NativeOpengl_surfaceChange(JNIEnv *env, jobject 
                                                            jint width, jint height) {
 
     // TODO
-    if (eglThread != NULL) {
+    if(eglThread != NULL)
+    {
         eglThread->onSurfaceChange(width, height);
 
         usleep(1000000);
