@@ -18,7 +18,6 @@ XYEglThread *eglThread = NULL;
 ANativeWindow *nativeWindow = NULL;
 
 
-
 const char *vertex = "attribute vec4 a_position;\n"
                      "\n"
                      "void main(){\n"
@@ -34,11 +33,17 @@ int program;
 GLint vPosition;
 
 //顶点数据
+//float vertexs[] = {
+//        -1, -1,
+////        1, 0,
+//        1,-1,
+//        0, 1
+//};
 float vertexs[] = {
+        1, -1,
+        1, 1,
         -1, -1,
-//        1, 0,
-        1,-1,
-        0, 1
+        -1, 1
 };
 
 void callback_SurfaceCreate(void *ctx) {
@@ -58,7 +63,7 @@ void callback_SurfaceChange(int w, int h, void *ctx) {
 
     LOGD("callback_SurfaceChange")
     XYEglThread *wlEglThread = static_cast<XYEglThread *>(ctx);
-    LOGD("w = %d, h = %d",w,h)
+    LOGD("w = %d, h = %d", w, h)
     glViewport(0, 0, w, h);
 }
 
@@ -73,9 +78,10 @@ void callback_SurfaceOndraw(void *ctx) {
     glUseProgram(program);
 
     glEnableVertexAttribArray(vPosition);
-    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8,vertexs);
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);//两个三角形
+//    glDrawArrays(GL_TRIANGLES, 0, 3);
 
 }
 
@@ -92,9 +98,7 @@ Java_com_xy_www_opengl4c_opengl_NativeOpengl_surfaceCreate(JNIEnv *env, jobject 
     eglThread->callBackOnChange(callback_SurfaceChange, eglThread);
     eglThread->callBackOnDraw(callback_SurfaceOndraw, eglThread);
 
-
     eglThread->onSurfaceCreate(nativeWindow);
-
 
 }
 
@@ -104,8 +108,7 @@ Java_com_xy_www_opengl4c_opengl_NativeOpengl_surfaceChange(JNIEnv *env, jobject 
                                                            jint width, jint height) {
 
     // TODO
-    if(eglThread != NULL)
-    {
+    if (eglThread != NULL) {
         eglThread->onSurfaceChange(width, height);
 
         usleep(1000000);
