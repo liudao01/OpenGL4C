@@ -34,7 +34,8 @@ GLint vPosition;
 //顶点数据
 float vertexs[] = {
         -1, -1,
-        1, 0,
+//        1, 0,
+        1,-1,
         0, 1
 };
 
@@ -63,7 +64,7 @@ void callback_SurfaceOndraw(void *ctx) {
     LOGD("callback_SurfaceOndraw")
     XYEglThread *wlEglThread = static_cast<XYEglThread *>(ctx);
 
-    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     //使用program  赋值的操作 数据传递的操作都在这个useProgram之后
@@ -72,7 +73,7 @@ void callback_SurfaceOndraw(void *ctx) {
     glEnableVertexAttribArray(vPosition);
     glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8,vertexs);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
 
 }
 
