@@ -103,6 +103,9 @@ void callback_SurfaceCreate(void *ctx) {
     //初始化矩阵
     initMatrix(matrix);
 
+    //旋转矩阵
+    rotateMatrix(90, matrix);
+
     //生成纹理
     glGenTextures(1, &textureId);
 
