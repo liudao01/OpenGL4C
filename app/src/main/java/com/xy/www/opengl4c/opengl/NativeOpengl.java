@@ -15,4 +15,9 @@ public class NativeOpengl {
     public native void surfaceCreate(Surface surface);
 
     public native void surfaceChange(int width, int height);
+
+    //length data的长度
+    public native void imgData(int width, int height,int length,byte[] data);
+
 }
+
