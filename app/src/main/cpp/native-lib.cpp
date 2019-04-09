@@ -103,8 +103,19 @@ void callback_SurfaceCreate(void *ctx) {
     //初始化矩阵
     initMatrix(matrix);
 
-    //旋转矩阵
-    rotateMatrix(90, matrix);
+    //旋转矩阵 大于0 逆时针 小于0 顺时针
+//    rotateMatrix(90, matrix);
+
+    //缩放矩阵
+//    scaleMatrix(0.5,matrix);
+
+    //平移
+//    transMatrix(0.5, 0, matrix);
+    //正交投影
+//    orthoM(-1, 1, -1, 1, matrix);//上下全部铺满
+
+    orthoM(-1, 1, -1, 1, matrix);//
+
 
     //生成纹理
     glGenTextures(1, &textureId);
@@ -128,12 +139,33 @@ void callback_SurfaceCreate(void *ctx) {
 
 }
 
-void callback_SurfaceChange(int w, int h, void *ctx) {
+void callback_SurfaceChange(int width, int height, void *ctx) {
 
     LOGD("callback_SurfaceChange")
     XYEglThread *wlEglThread = static_cast<XYEglThread *>(ctx);
     LOGD("w = %d, h = %d", w, h)
-    glViewport(0, 0, w, h);
+    glViewport(0, 0, width, height);
+
+
+    //根据比例 看根据宽还是高进行动态缩放
+    //屏幕宽除以屏幕高
+    float screen_r = 1.0 * width / height;
+    //图片的宽高比
+    float picture_r = 1.0 * w / h;
+
+    if (screen_r > picture_r) {
+        //图片宽度缩放
+
+        //根据屏幕宽度和图片宽度的比值 得到图片高度缩放的比值
+        float r = width / (1.0 * height /h * w);
+        orthoM(-r, r, -1, 1, matrix);
+    } else {
+        //图片高度缩放
+
+        //根据屏幕宽度和图片宽度的比值 得到图片高度缩放的比值
+        float r = height / (1.0 * width / w * h);
+        orthoM(-1, 1, -r, r, matrix);
+    }
 }
 
 void callback_SurfaceOndraw(void *ctx) {
