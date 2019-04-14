@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 
 
-file(GLOB my_source src/main/cpp/*.cpp src/main/cpp/*.c src/main/cpp/egl/*.cpp src/main/cpp/egl/*.c)
+file(GLOB my_source src/main/cpp/*.cpp src/main/cpp/*.c src/main/cpp/egl/*.cpp src/main/cpp/egl/*.c src/main/cpp/opengl/*.cpp src/main/cpp/opengl/.*c)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNO_CRYPTO")
 add_library(
         native-lib
