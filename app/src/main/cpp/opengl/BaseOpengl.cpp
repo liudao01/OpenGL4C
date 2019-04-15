@@ -27,7 +27,6 @@ BaseOpengl::BaseOpengl() {
             0, 0
     };
     memcpy(fragments, f, sizeof(f));
-
 }
 
 BaseOpengl::~BaseOpengl() {
@@ -42,6 +41,7 @@ void BaseOpengl::onCreate() {
 }
 
 void BaseOpengl::onChange(int width, int height) {
+
 }
 
 void BaseOpengl::onDraw() {
