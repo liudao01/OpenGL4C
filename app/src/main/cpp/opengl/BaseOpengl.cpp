@@ -28,7 +28,6 @@ BaseOpengl::BaseOpengl() {
     };
     memcpy(fragments, f, sizeof(f));
 
-
 }
 
 BaseOpengl::~BaseOpengl() {
