@@ -13,11 +13,11 @@ public :
     int surface_width;
     int surface_height;
 
-    char *vertex;
-    char *fragment;
+    char *vertex;//顶点着色器数据
+    char *fragment;//纹理着色器数据
 
-    float *vertexs;
-    float *fragments;
+    float *vertexs;//顶点坐标
+    float *fragments;//纹理坐标
 
     GLuint program;
 public:
