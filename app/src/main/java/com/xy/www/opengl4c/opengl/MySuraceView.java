@@ -13,6 +13,11 @@ import android.view.SurfaceView;
 public class MySuraceView extends SurfaceView implements SurfaceHolder.Callback {
 
     private  NativeOpengl nativeOpengl;
+    private OnSurfaceListener onSurfaceListener;
+
+    public void setOnSurfaceListener(OnSurfaceListener onSurfaceListener) {
+        this.onSurfaceListener = onSurfaceListener;
+    }
 
     public MySuraceView(Context context) {
         this(context,null);
@@ -36,6 +41,9 @@ public class MySuraceView extends SurfaceView implements SurfaceHolder.Callback 
         if (nativeOpengl != null) {
             //把surface传给c层
             nativeOpengl.surfaceCreate(holder.getSurface());
+            if (onSurfaceListener != null) {
+                onSurfaceListener.init();
+            }
         }
     }
 
@@ -49,6 +57,12 @@ public class MySuraceView extends SurfaceView implements SurfaceHolder.Callback 
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        if (nativeOpengl != null) {
+            nativeOpengl.surfaceDestory();
+        }
+    }
 
+    public interface  OnSurfaceListener{
+        void init();
     }
 }

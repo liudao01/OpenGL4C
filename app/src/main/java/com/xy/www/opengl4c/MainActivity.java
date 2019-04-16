@@ -31,14 +31,20 @@ public class MainActivity extends AppCompatActivity {
         mySurfaceview.setNativeOpengl(nativeOpengl);
 
 
-        //图
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.pikaqiu);
-        ByteBuffer fcbuffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
-        bitmap.copyPixelsToBuffer(fcbuffer);
-        fcbuffer.flip();
-        byte[] pixels = fcbuffer.array();
-        Log.e(TAG, "initView: pixels " + pixels.length);
-        nativeOpengl.imgData(bitmap.getWidth(), bitmap.getHeight(), pixels.length, pixels);
+        mySurfaceview.setOnSurfaceListener(new MySuraceView.OnSurfaceListener() {
+            @Override
+            public void init() {
+                //图
+                final Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                        R.drawable.pikaqiu);
+                ByteBuffer fcbuffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
+                bitmap.copyPixelsToBuffer(fcbuffer);
+                fcbuffer.flip();
+                byte[] pixels = fcbuffer.array();
+                Log.e(TAG, "initView: pixels " + pixels.length);
+                nativeOpengl.imgData(bitmap.getWidth(), bitmap.getHeight(), pixels.length, pixels);
+            }
+        });
+
     }
 }

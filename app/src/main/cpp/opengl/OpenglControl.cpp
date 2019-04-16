@@ -37,6 +37,12 @@ void callback_SurfaceChange(int width, int height, void *ctx) {
  * draw
  */
 void callback_SurfaceOndraw(void *ctx) {
+    OpenglControl *openglControl = static_cast<OpenglControl *>(ctx);
+    if (openglControl != NULL) {
+        if (openglControl->baseOpengl != NULL) {
+            openglControl->baseOpengl->onDraw();
+        }
+    }
 
 }
 
@@ -81,6 +87,42 @@ void OpenglControl::onChangeSurface(int width, int height) {
 
 
 void OpenglControl::onDestorySurface() {
+
+    if (eglThread != NULL) {
+        eglThread->destory();
+    }
+
+    if (baseOpengl != NULL) {
+        baseOpengl->destory();
+        delete baseOpengl;
+        baseOpengl = NULL;
+    }
+
+    if (nativeWindow != NULL) {
+        ANativeWindow_release(nativeWindow);
+        nativeWindow = NULL;
+    }
+
+
+
+
+}
+
+void OpenglControl::setPilex(void *data, int widht, int height, int length) {
+
+    pic_width = widht;
+    pic_height = height;
+    pilex = malloc(length);
+    memcpy(pilex, data, length);
+    if (baseOpengl != NULL) {
+        //调用
+        baseOpengl->setPilex(pilex, widht, height, length);
+    }
+
+    if (eglThread != NULL) {
+        LOGD("setPilex 更新")
+        eglThread->notifyRender();
+    }
 
 }
 

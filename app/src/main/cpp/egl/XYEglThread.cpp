@@ -18,59 +18,62 @@ XYEglThread::~XYEglThread() {
 
 void *eglThreadImpl(void *context) {
 
-    XYEglThread *wlEglThread = static_cast<XYEglThread *>(context);
+    XYEglThread *eglThread = static_cast<XYEglThread *>(context);
 
-    if (wlEglThread != NULL) {
+    if (eglThread != NULL) {
 
-        XYEglHelper *wlEglHelper = new XYEglHelper();
-        wlEglHelper->initEgl(wlEglThread->nativeWindow);
-        wlEglThread->isExit = false;
+        XYEglHelper *eglHelper = new XYEglHelper();
+        eglHelper->initEgl(eglThread->nativeWindow);
+        eglThread->isExit = false;
 
         while (true) {
-            if (wlEglThread->isCreate) {
+            if (eglThread->isCreate) {
                 LOGD("eglthread call SurfaceCreate")
 
-                wlEglThread->isCreate = false;
-                wlEglThread->onCreate(wlEglThread->onCreateCtx);
+                eglThread->isCreate = false;
+                eglThread->onCreate(eglThread->onCreateCtx);
             }
-            if (wlEglThread->isChange) {
+            if (eglThread->isChange) {
                 LOGD("eglthread call SurfaceChange")
 
-                wlEglThread->isChange = false;
+                eglThread->isChange = false;
 
 
-                wlEglThread->onChange(wlEglThread->surfaceWidth, wlEglThread->surfaceHeight,
-                                      wlEglThread->onChangeCtx);
+                eglThread->onChange(eglThread->surfaceWidth, eglThread->surfaceHeight,
+                                      eglThread->onChangeCtx);
 
                 //opengl
-//                glViewport(0, 0, wlEglThread->surfaceWidth, wlEglThread->surfaceHeight);
-                wlEglThread->isStart = true;
+//                glViewport(0, 0, eglThread->surfaceWidth, eglThread->surfaceHeight);
+                eglThread->isStart = true;
             }
 
             //draw
-            if (wlEglThread->isStart) {
+            if (eglThread->isStart) {
 
 //                glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 //                glClear(GL_COLOR_BUFFER_BIT);
-                wlEglThread->onDraw(wlEglThread->onDrawCtx);
+                eglThread->onDraw(eglThread->onDrawCtx);
                 //调用绘制
-                wlEglHelper->swapBuffers();
+                eglHelper->swapBuffers();
             }
 
 
             LOGD("eglthread call draw")
-            if (wlEglThread->renderType == OPENGL_RENDER_AUTO) {
+            if (eglThread->renderType == OPENGL_RENDER_AUTO) {
                 usleep(1000000 / 60);
             } else {
                 //线程加锁
-                pthread_mutex_lock(&wlEglThread->pthread_mutex);
+                pthread_mutex_lock(&eglThread->pthread_mutex);
                 //根据pthread_cond 等待
-                pthread_cond_wait(&wlEglThread->pthread_cond,&wlEglThread->pthread_mutex);
+                pthread_cond_wait(&eglThread->pthread_cond,&eglThread->pthread_mutex);
                 //线程解锁
-                pthread_mutex_unlock(&wlEglThread->pthread_mutex);
+                pthread_mutex_unlock(&eglThread->pthread_mutex);
             }
 
-            if (wlEglThread->isExit) {
+            if (eglThread->isExit) {
+                eglHelper->destroyEgl();
+                delete eglHelper;
+                eglHelper = NULL;
                 LOGD("eglthread call isExit")
                 break;
             }
@@ -129,6 +132,15 @@ void XYEglThread::notifyRender() {
     pthread_cond_signal(&pthread_cond);
 
     pthread_mutex_unlock(&pthread_mutex);
+}
+
+void XYEglThread::destory() {
+    isExit = true;
+    notifyRender();
+    //线程同步
+    pthread_join(eglThread, NULL);
+    nativeWindow = NULL;
+    eglThread = -1;
 }
 
 

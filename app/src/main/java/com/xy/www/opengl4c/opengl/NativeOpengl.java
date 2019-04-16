@@ -19,5 +19,7 @@ public class NativeOpengl {
     //length data的长度
     public native void imgData(int width, int height,int length,byte[] data);
 
+    public native void surfaceDestory();
+
 }
 

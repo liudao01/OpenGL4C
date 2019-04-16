@@ -47,3 +47,12 @@ void BaseOpengl::onChange(int width, int height) {
 void BaseOpengl::onDraw() {
 
 }
+
+void BaseOpengl::destory() {
+
+
+}
+
+void BaseOpengl::setPilex(void *data, int widht, int height, int length) {
+
+}

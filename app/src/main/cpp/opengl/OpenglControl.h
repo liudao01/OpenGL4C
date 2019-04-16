@@ -18,6 +18,10 @@ public:
     ANativeWindow *nativeWindow = NULL;
     BaseOpengl *baseOpengl = NULL;
 
+    int pic_width;
+    int pic_height;
+    void *pilex = NULL;
+
 public:
     OpenglControl();
     ~OpenglControl();
@@ -26,8 +30,9 @@ public:
 
     void onChangeSurface(int width, int height);
 
-
     void onDestorySurface();
+
+    void setPilex(void *data, int widht, int height, int length);
 };
 
 
